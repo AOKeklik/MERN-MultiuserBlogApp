@@ -31,11 +31,11 @@ exports.signinController = (req,res) => {
             return res.status(400).json({error: 'Email and Password do not match!'})
 
         const token = jwt.sign(
-            {id: user._id},
-            process.env.JWT_TOKEN,
+            {_id: user._id},
+            process.env.JWT_SECRET,
             {expiresIn: '1d'}
         )
-        
+
         const {_id,username,name,email,role} = user
         return res.status(200).json({
             token,
@@ -45,6 +45,18 @@ exports.signinController = (req,res) => {
 }
 
 exports.signoutController = (req,res) => {
-    res.clearCookie ('token')
     res.status(200).json({message: 'Signout success!'})
+}
+
+exports.testController = (req, res) => {
+    try {
+        const tok = req.headers.authorization.split(' ')[1]
+        const token = jwt.decode(
+            tok, 
+            process.env.JWT_SECRET
+        )
+        res.status(200).json({user: token})
+    } catch(err) {
+        console.log(err)
+    }
 }

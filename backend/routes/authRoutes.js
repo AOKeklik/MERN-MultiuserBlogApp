@@ -7,7 +7,8 @@ const {
 const {
     signupController, 
     signinController,
-    signoutController
+    signoutController,
+    testController,
 } = require('../controllers/authControllers')
 
 const authRoutes = express.Router()
