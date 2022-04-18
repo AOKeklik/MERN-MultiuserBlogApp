@@ -35,15 +35,6 @@ exports.signinController = (req,res) => {
             process.env.JWT_TOKEN,
             {expiresIn: '1d'}
         )
-
-        res.cookie (
-            'token',
-            token,
-            {
-                sameSite: 'none',
-                httpOnly: true
-            }
-        )
         
         const {_id,username,name,email,role} = user
         return res.status(200).json({
