@@ -19,11 +19,27 @@ const Header = () => {
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ms-auto">
                     {!checkAuth && <>
-                        <Link href="/signin"><Nav.Link as="span" role="button" className='text-white'>Signin</Nav.Link></Link>
-                        <Link href="/signup"><Nav.Link as="span" role="button" className='text-white'>Signup</Nav.Link></Link>
+                        <Nav.Item>
+                            <Link href="/signin"><a className="nav-link text-white">Signin</a></Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Link href="/signup"><a className="nav-link text-white">Signup</a></Link>
+                        </Nav.Item>
                     </>}
                     {checkAuth && (
-                        <Nav.Link onClick={() => signoutAction(() => Router.replace('/signin'))}>Signout</Nav.Link>
+                        <Nav.Item>
+                            <Nav.Link onClick={() => signoutAction(() => Router.replace('/signin'))} className='text-white'>Signout</Nav.Link>
+                        </Nav.Item>
+                    )}
+                    {checkAuth && checkAuth.user.role === 0 && (
+                        <Nav.Item>
+                            <Link href="/user"><a className="nav-link text-white"><span className='fw-bold'>{checkAuth.user.name}</span>'s Dashboard</a></Link>
+                        </Nav.Item>
+                    )}
+                    {checkAuth && checkAuth.user.role === 1 && (
+                        <Nav.Item>
+                            <Link href="/admin"><a className="nav-link text-white"><span className='fw-bold'>{checkAuth.user.name}</span>'s Dashboard</a></Link>
+                        </Nav.Item>
                     )}
                 </Nav>
             </Navbar.Collapse>

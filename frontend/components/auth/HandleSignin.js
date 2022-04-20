@@ -1,6 +1,6 @@
 import { useState } from "react"
 import Router from 'next/router'
-import { authenticate, signinAction } from "../../actions/authActions"
+import { authenticate, isAuth, signinAction } from "../../actions/authActions"
 
 const HandleSignin = () => {
 	const initialState = {
@@ -31,7 +31,12 @@ const HandleSignin = () => {
 					message: data.message,
 					showForm: false,
 				})
-				authenticate(data, () => Router.push('/'))
+				authenticate(data, () => {
+					if (isAuth() && isAuth().user.role === 1)
+						Router.push('/admin')
+					else	
+						Router.push('/user')
+				})
 			}
 		})
 	}

@@ -1,9 +1,12 @@
+import { Container } from 'react-bootstrap'
 import Header from './Header'
 
 const Layout = ({children}) => {
     return <>
         <Header />
-        {children}
+        <Container>
+            {children}
+        </Container>
     </>
 }
 
