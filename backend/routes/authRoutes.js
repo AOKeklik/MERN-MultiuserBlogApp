@@ -1,14 +1,10 @@
 const express = require('express')
 const runValidator = require('../validators')
-const {
-    signupValidator, 
-    signinValidator
-} = require('../validators/authValidators')
+const {signupValidator, signinValidator} = require('../validators/authValidators')
 const {
     signupController, 
     signinController,
     signoutController,
-    testController,
 } = require('../controllers/authControllers')
 
 const authRoutes = express.Router()

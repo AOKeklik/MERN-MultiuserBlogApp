@@ -20,7 +20,13 @@ if (process.env.NODE_ENV === 'development')
 
 const authRoutes = require('./routes/authRoutes')
 const userRoutes = require('./routes/userRoutes')
+const categoryRoutes = require('./routes/categoryRoutes')
+const tagRoutes = require('./routes/tagRoutes')
 app.use('/auth', authRoutes)
 app.use('/user', userRoutes)
+app.use(categoryRoutes)
+app.use(tagRoutes)
+
+console.log(process.env.PORT)
 
 app.listen(process.env.PORT, () => console.log('Server Done!'))

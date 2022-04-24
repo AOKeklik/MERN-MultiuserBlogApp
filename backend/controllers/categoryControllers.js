@@ -9,12 +9,12 @@ exports.createCategoryController = (req,res) => {
         trim: true,
     })
 
-    categoryModel({name, slug})
+    new categoryModel({name, slug})
     .save((err,data) => {
         if (err)
             return res.status(400).json({error: errorHandler(err)})
 
-        res.status(200).json(data)  
+        return res.status(200).json(data)  
     })
 }
 exports.featchCategoriesController = (req,res) => {
@@ -22,7 +22,7 @@ exports.featchCategoriesController = (req,res) => {
         if (err || !data) 
             return res.status(400).json({error: errorHandler(err)})
 
-        res.status(200).json(data)
+        return res.status(200).json(data)
     })
 }
 exports.fetchCategoryController = (req,res) => {
@@ -30,9 +30,9 @@ exports.fetchCategoryController = (req,res) => {
 
     categoryModel.findOne({slug}).exec((err,category) => {
         if (err || !category)
-            res.status(400).json({error: errorHandler(err)})
+            return res.status(400).json({error: errorHandler(err)})
 
-        res.status(200).json([category,slug])
+        return res.status(200).json([category,slug])
     })
 }
 exports.removeCategoryController = (req,res) => {
@@ -42,6 +42,6 @@ exports.removeCategoryController = (req,res) => {
         if (err || !category)
             return res.status(400).json({error: errorHandler(err)})
 
-        res.status(200).json({message: `${category.slug} category is deleted successfully..`})
+        return res.status(200).json({message: `${category.slug} category is deleted successfully..`})
     })
 }

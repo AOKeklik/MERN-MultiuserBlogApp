@@ -8,7 +8,7 @@ exports.userMiddleware = (req,res,next) => {
 
     userModel.findById({_id: userId}).exec((err,user) => {
         if (err || !user)
-            res.status(400).json({error: 'User not fout!'})
+            return res.status(400).json({error: 'User not fout!'})
             
         req.profile = user
 
@@ -21,10 +21,10 @@ exports.adminMiddleware = (req,res,next) => {
 
     userModel.findById({_id: userId}).exec((err,user) => {
         if (err || !user)
-            res.status(400).json({error: 'User not found!'})
+            return res.status(400).json({error: 'User not found!'})
 
         if (user.role !== 1)
-            res.status(400).json({error: 'Admin resource. Request is danied.'})
+            return res.status(400).json({error: 'Admin resource. Request is danied!'})
 
         req.profile = user
 

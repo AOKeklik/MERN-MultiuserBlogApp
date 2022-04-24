@@ -2,8 +2,14 @@ import Link from 'next/link'
 import Router from 'next/router'
 import { useEffect, useState } from 'react'
 import { Container, Nav, Navbar } from 'react-bootstrap'
+import nProgress from 'nprogress'
+
 import { isAuth, signoutAction } from '../actions/authActions'
 import { APP_NAME } from '../config'
+
+Router.onRouteChangeStart = url => nProgress.start()
+Router.onRouteChangeComplete = url => nProgress.done()
+Router.onRouteChangeError = url => nProgress.done()
 
 const Header = () => {
     const [checkAuth,setCheckAuth] = useState()
