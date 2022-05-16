@@ -1,48 +1,58 @@
 import { useState } from "react"
-import Router from 'next/router'
+import Router from "next/router"
 import { authenticate, isAuth, signinAction } from "../../actions/authActions"
 
 const HandleSignin = () => {
 	const initialState = {
-		email: '',
-		password: '',
+		email: "",
+		password: "",
 		loading: false,
-		error: '',
-		message: '',
+		error: "",
+		message: "",
 		showForm: true,
 	}
-	const [values,setValues] = useState(initialState)
-	const handleChange = name => e => setValues({...values, error: false, [name]: e.target.value})
-	const handleSubmit = e => {
+	const [values, setValues] = useState(initialState)
+	const handleChange = (name) => (e) =>
+		setValues({ ...values, error: false, [name]: e.target.value })
+	const handleSubmit = (e) => {
 		e.preventDefault()
-		setValues({...values, error: false, loading: true})
+		setValues({ ...values, error: false, loading: true })
 
-		const user = {email: values.email,password: values.password}
-		signinAction (user).then(data => {
+		const user = { email: values.email, password: values.password }
+		signinAction(user).then((data) => {
 			if (data.error)
-				setValues({...values, error: data.error, loading: false})
+				setValues({ ...values, error: data.error, loading: false })
 			else {
 				setValues({
 					...values,
-					email: '',
-					password: '',
+					email: "",
+					password: "",
 					loading: false,
-					error: '',
+					error: "",
 					message: data.message,
 					showForm: false,
 				})
 				authenticate(data, () => {
-					if (isAuth() && isAuth().user.role === 1)
-						Router.push('/admin')
-					else	
-						Router.push('/user')
+					if (isAuth() && isAuth().user.role === 1) Router.push("/admin")
+					else Router.push("/user")
 				})
 			}
 		})
 	}
-	const isError = () => values.error ? <div className="alert alert-warning">{values.error}</div> : ''
-	const isMessage = () => values.message ? <div className="alert alert-success">{values.message}</div> : ''
-	const isLoading = () => values.loading ? <div className="alert alert-info">Loading...</div> : ''
+	const isError = () =>
+		values.error ? (
+			<div className="alert alert-warning">{values.error}</div>
+		) : (
+			""
+		)
+	const isMessage = () =>
+		values.message ? (
+			<div className="alert alert-success">{values.message}</div>
+		) : (
+			""
+		)
+	const isLoading = () =>
+		values.loading ? <div className="alert alert-info">Loading...</div> : ""
 
 	return {
 		values,
