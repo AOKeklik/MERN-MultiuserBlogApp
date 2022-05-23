@@ -1,21 +1,12 @@
 const jwt = require("jsonwebtoken")
-const jwtt = require("express-jwt")
 const userModel = require("../models/userModel")
-
-exports.userMiddleware = (req, res, next) => {
-	const userId = req.token._id
-
-	userModel.findById({ _id: userId }).exec((err, user) => {
-		if (err || !user) return res.status(400).json({ error: "User not fout!" })
-
-		req.profile = user
-
-		next()
-	})
-}
+const mongoose = require("mongoose")
 
 exports.adminMiddleware = (req, res, next) => {
 	const userId = req.token._id
+
+	if (!mongoose.Types.ObjectId.isValid(userId))
+		return res.status(400).json({ error: "Id not valid!" })
 
 	userModel.findById({ _id: userId }).exec((err, user) => {
 		if (err || !user) return res.status(400).json({ error: "User not found!" })
@@ -31,18 +22,30 @@ exports.adminMiddleware = (req, res, next) => {
 	})
 }
 
+exports.userMiddleware = (req, res, next) => {
+	const userId = req.token._id
+
+	if (!mongoose.Types.ObjectId.isValid(userId))
+		return res.status(400).json({ error: "Id not valid!" })
+
+	userModel.findById({ _id: userId }).exec((err, user) => {
+		if (err || !user) return res.status(400).json({ error: "User not fout!" })
+
+		req.profile = user
+
+		next()
+	})
+}
+
 exports.tokenMiddleware = (req, res, next) => {
-	jwt.verify(
-		req.headers.authorization.split(" ")[1],
-		process.env.JWT_SECRET,
-		(err, token) => {
-			if (err)
-				return res
-					.status(400)
-					.json({ error: "Admin resource. Request is danied!" })
-			else req.token = token
-		}
-	)
+	const token = req.headers.authorization
+
+	if (!token) return res.status(400).json({ error: "Token not found!" })
+
+	jwt.verify(token.split(" ")[1], process.env.JWT_SECRET, (err, token) => {
+		if (err) return res.status(400).json({ error: "Wrong token value!" })
+		else req.token = token
+	})
 
 	next()
 }
